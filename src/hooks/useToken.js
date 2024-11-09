@@ -7,6 +7,15 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const GET_TOKEN_PRICE = gql`
+  query GetTokenPrice($token0: String!, $token1: String!) {
+    pair(id: $token0$token1) {
+      token0Price
+      token1Price
+    }
+  }
+`;
+
 export const useToken = (fromToken, toToken) => {
   const [price, setPrice] = useState(null);
   const [loading, setLoading] = useState(true);
