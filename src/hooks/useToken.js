@@ -1,4 +1,11 @@
 import { useState, useEffect } from 'react';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+
+// Apollo Client to connect to the Uniswap API
+const client = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  cache: new InMemoryCache(),
+});
 
 export const useToken = (fromToken, toToken) => {
   const [price, setPrice] = useState(null);
