@@ -6,7 +6,13 @@ export const useWallet = () => {
   const [balance, setBalance] = useState(null);
 
   const connectWallet = async () => {
-    // Web3Provider and request access to accounts
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask is not installed! Please install.");
+        return;
+      }
+
+      // Web3Provider and request access to accounts
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []); 
       const signer = provider.getSigner();
@@ -18,7 +24,10 @@ export const useWallet = () => {
 
       setAddress(walletAddress);
       setBalance(balanceInEth);
-    } 
+    } catch (error) {
+      console.error("Error connecting to MetaMask:", error);
+    }
+  };
 
   return { address, balance, connectWallet };
 };
