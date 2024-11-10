@@ -4,7 +4,9 @@ import axios from 'axios';
 // hook for CoinGecko API
 export const useToken = (fromToken, toToken) => {
   const [price, setPrice] = useState(null);
+  const [previousPrice, setPreviousPrice] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [priceDirection, setPriceDirection] = useState(null);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -20,8 +22,6 @@ export const useToken = (fromToken, toToken) => {
           // Fetch ETH -> BTC price for WBTC
           url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd`;
         }
-
-        console.log(`Request URL: ${url}`);
         
         // this will fetch from CoinGecko API
         const response = await axios.get(url);
@@ -40,7 +40,6 @@ export const useToken = (fromToken, toToken) => {
         }
 
         if (priceData) {
-          console.log(`Fetched price: ${priceData}`);
           setPrice(priceData);
         } else {
           console.error('Price data not found for the selected pair');
@@ -53,7 +52,30 @@ export const useToken = (fromToken, toToken) => {
     };
 
     fetchPrice();
+
+    // Polling in 5 seconds
+    const intervalId = setInterval(() => {
+      fetchPrice();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+
   }, [fromToken, toToken]); // token pair changes, will change price also
 
-  return { price, loading };
+  // for price fluctuation
+  useEffect(() => {
+    if (price && previousPrice !== null) {
+      if (price > previousPrice) {
+        setPriceDirection('up');
+      } else if (price < previousPrice) {
+        setPriceDirection('down');
+      } else {
+        setPriceDirection(null); 
+      }
+    }
+
+    setPreviousPrice(price);
+  }, [price]);
+
+  return { price, loading, priceDirection };
 };
