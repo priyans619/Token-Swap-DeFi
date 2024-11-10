@@ -1,5 +1,6 @@
 import React from 'react';
 import WalletConnect from '../components/WalletConnect';
+import TokenSwap from '../components/TokenSwap';
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
         <h1 className="text-3xl font-bold text-white">Token Swap Interface</h1>
         <WalletConnect />
       </div>
+      <TokenSwap />
     </div>
   );
 };
