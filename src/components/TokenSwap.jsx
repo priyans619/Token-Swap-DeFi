@@ -8,7 +8,7 @@ const TokenSwap = () => {
   const [estimatedAmount, setEstimatedAmount] = useState(null);
 
   // Custom hook to fetch price
-  const { price, loading } = useToken(fromToken, toToken);
+  const { price, loading, priceDirection } = useToken(fromToken, toToken);
 
   useEffect(() => {
     if (amount && price) {
@@ -66,11 +66,30 @@ const TokenSwap = () => {
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-lg">Estimated {toToken}</span>
-          <span className="text-xl font-semibold">
-            {loading ? 'Loading...' : estimatedAmount || '0'}
-          </span>
+
+        {/* Price Display and Direction Indicator */}
+        <div className="mt-4 text-center">
+          {loading ? (
+            <p>Loading price...</p>
+          ) : (
+            <>
+              <p className="text-xl">
+                1 {fromToken} = {price} {toToken}
+              </p>
+              {priceDirection && (
+                <div className="mt-2">
+                  <span className={`text-xl ${priceDirection === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                    {priceDirection === 'up' ? '↑' : '↓'} {priceDirection === 'up' ? 'Price Went Up' : 'Price Went Down'}
+                  </span>
+                </div>
+              )}
+              {estimatedAmount && (
+                <p className="mt-2">
+                  Estimated {amount} {fromToken} = {estimatedAmount} {toToken}
+                </p>
+              )}
+            </>
+          )}
         </div>
 
         {/* Swap Button */}
