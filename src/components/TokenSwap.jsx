@@ -54,6 +54,25 @@ const TokenSwap = () => {
           </select>
         </div>
 
+        {/* Amount Input */}
+        <div className="flex items-center justify-between">
+          <label htmlFor="amount" className="text-lg">Amount</label>
+          <input
+            type="number"
+            id="amount"
+            className="bg-gray-700 text-white p-2 rounded w-2/3"
+            placeholder={`Amount in ${fromToken}`}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-lg">Estimated {toToken}</span>
+          <span className="text-xl font-semibold">
+            {loading ? 'Loading...' : estimatedAmount || '0'}
+          </span>
+        </div>
+
         {/* Swap Button */}
         <div className="flex justify-center mt-6">
           <button
