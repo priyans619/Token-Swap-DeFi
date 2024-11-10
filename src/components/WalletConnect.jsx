@@ -17,9 +17,9 @@ const WalletConnect = () => {
 
       {/* Wallet Information */}
       {address && (
-        <div className="mt-4 pt-12">
-          <p><strong>Wallet Address:</strong> {address}</p>
-          <p><strong>Balance:</strong> {balance} ETH</p>
+        <div className="mt-4 flex flex-col items-center justify-centerp-6 rounded-lg shadow-lg">
+          <p className="text-lg mb-2"><strong>Wallet Address:</strong> {address}</p>
+          <p className="text-lg"><strong>Balance:</strong> {balance} ETH</p>
         </div>
       )}
     </div>
