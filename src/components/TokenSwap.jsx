@@ -20,15 +20,14 @@ const TokenSwap = () => {
     }
   }, [amount, price]);
 
-  // Function to handle the swap
   const handleSwap = async () => {
     if (!amount) return alert("Please enter an amount");
 
-    // Mock transaction details
-    const slippage = 0.5; // 0.5% slippage
-    const estimatedGas = 21000; // Example gas estimate
+    // Mock details
+    const slippage = 0.5;
+    const estimatedGas = 21000;
 
-    // Show confirmation modal with details
+    //confirmation modal with details
     setTransactionDetails({ fromToken, toToken, amount, slippage, estimatedGas });
     setShowModal(true);
   };
@@ -39,7 +38,7 @@ const TokenSwap = () => {
     setIsPending(true);
 
     try {
-      // Example of connecting to MetaMask
+      
       if (window.ethereum) {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -47,7 +46,7 @@ const TokenSwap = () => {
 
         // Simulate a transaction with a mock address
         const transaction = await signer.sendTransaction({
-          to: "0x66F7D70d17c1D2366aA54237fB56684AD35c685b",  // Replace with a valid testnet address
+          to: "0x66F7D70d17c1D2366aA54237fB56684AD35c685b", 
           value: ethers.utils.parseEther(amount),
         });
 
@@ -61,7 +60,6 @@ const TokenSwap = () => {
       alert("Transaction Failed");
     } finally {
       setIsPending(false);
-      // Update balance or other UI state if necessary
     }
   };
 
@@ -140,7 +138,7 @@ const TokenSwap = () => {
         </div>
       </div>
 
-      {/* Modal for Transaction Confirmation */}
+      {/*Transaction Confirmation */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-gray-800 p-6 rounded shadow-lg text-white max-w-md w-full">
