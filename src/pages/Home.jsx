@@ -1,17 +1,20 @@
 import React from 'react';
-import WalletConnect from '../components/WalletConnect';
+import Navbar from '../components/Navbar';
 import TokenSwap from '../components/TokenSwap';
+import OrderBook from '../components/OrderBook';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-blue-200 via-black p-4 bg-[length:100%_100%]">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-white to-violet-400">
-          DeFi Exchange
-        </h1>
+    <div className="min-h-screen bg-gradient-to-b from-black to-blue-200 via-black p-4">
+      <Navbar />
+      <div className="flex flex-col lg:flex-row mt-6">
+        <div className="flex-1 mr-8">
+          <TokenSwap />
+        </div>
+        <div className="flex-1 mr-10">
+          <OrderBook />
+        </div>
       </div>
-      <WalletConnect />
-      <TokenSwap />
     </div>
   );
 };
