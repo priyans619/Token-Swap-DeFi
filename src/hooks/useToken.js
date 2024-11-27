@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// hook for CoinGecko API
 export const useToken = (fromToken, toToken) => {
   const [price, setPrice] = useState(null);
   const [previousPrice, setPreviousPrice] = useState(null);
@@ -9,34 +8,56 @@ export const useToken = (fromToken, toToken) => {
   const [priceDirection, setPriceDirection] = useState(null);
 
   useEffect(() => {
+    let intervalId;
+
     const fetchPrice = async () => {
       if (!fromToken || !toToken) return;
 
+      setLoading(true);
       try {
         let url = '';
-
-        if (toToken === 'usd-coin' || toToken === 'tether') {
-          // Fetch ETH -> USD price for USDC/USDT (stablecoins)
+        if (fromToken === 'ethereum' && (toToken === 'usd-coin' || toToken === 'tether')) {
+          // ETH -> USDC/USDT
           url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`;
-        } else if (toToken === 'wrapped-bitcoin') {
-          // Fetch ETH -> BTC price for WBTC
+        } else if (fromToken === 'ethereum' && toToken === 'wrapped-bitcoin') {
+          // ETH -> WBTC
+          url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd`;
+        } else if (fromToken === 'usd-coin' || fromToken === 'tether') {
+          // USDC/USDT -> ETH/WBTC
+          url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd`;
+        } else if (fromToken === 'wrapped-bitcoin') {
+          // WBTC -> ETH/USDC/USDT
           url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum,bitcoin&vs_currencies=usd`;
         }
-        
-        // this will fetch from CoinGecko API
-        const response = await axios.get(url);
-        console.log('API Response:', response.data);
 
+        const response = await axios.get(url);
         let priceData = 0;
 
-        if (toToken === 'usd-coin' || toToken === 'tether') {
-          // For USDC/USDT, price is the ETH to USD price
-          priceData = response.data.ethereum?.usd || 0;
-        } else if (toToken === 'wrapped-bitcoin') {
-          // For WBTC, get ETH -> BTC and then calculate the price in WBTC
+        if (fromToken === 'ethereum') {
+          if (toToken === 'usd-coin' || toToken === 'tether') {
+            priceData = response.data.ethereum?.usd || 0; // ETH -> USD
+          } else if (toToken === 'wrapped-bitcoin') {
+            const ethPriceInUsd = response.data.ethereum?.usd;
+            const btcPriceInUsd = response.data.bitcoin?.usd;
+            priceData = ethPriceInUsd / btcPriceInUsd; // ETH -> BTC
+          }
+        } else if (fromToken === 'usd-coin' || fromToken === 'tether') {
           const ethPriceInUsd = response.data.ethereum?.usd;
+          if (toToken === 'ethereum') {
+            priceData = 1 / ethPriceInUsd; // USD -> ETH
+          } else if (toToken === 'wrapped-bitcoin') {
+            const btcPriceInUsd = response.data.bitcoin?.usd;
+            priceData = ethPriceInUsd / btcPriceInUsd; // USD -> BTC
+          }
+        } else if (fromToken === 'wrapped-bitcoin') {
           const btcPriceInUsd = response.data.bitcoin?.usd;
-          priceData = ethPriceInUsd / btcPriceInUsd;
+          if (toToken === 'ethereum') {
+            const ethPriceInUsd = response.data.ethereum?.usd;
+            priceData = btcPriceInUsd / ethPriceInUsd; // BTC -> ETH
+          } else if (toToken === 'usd-coin' || toToken === 'tether') {
+            const btcPriceInUsd = response.data.bitcoin?.usd;
+            priceData = btcPriceInUsd; // BTC -> USD
+          }
         }
 
         if (priceData) {
@@ -51,29 +72,29 @@ export const useToken = (fromToken, toToken) => {
       }
     };
 
+    // Trigger an immediate fetch when token pair changes
     fetchPrice();
 
-    // Polling in 5 seconds
-    const intervalId = setInterval(() => {
+    // polling
+    intervalId = setInterval(() => {
       fetchPrice();
     }, 5000);
 
+    // Cleanup for token change
     return () => clearInterval(intervalId);
+  }, [fromToken, toToken]);
 
-  }, [fromToken, toToken]); // token pair changes, will change price also
-
-  // for price fluctuation
   useEffect(() => {
+    // Detect price direction
     if (price && previousPrice !== null) {
       if (price > previousPrice) {
         setPriceDirection('up');
       } else if (price < previousPrice) {
         setPriceDirection('down');
       } else {
-        setPriceDirection(null); 
+        setPriceDirection(null);
       }
     }
-
     setPreviousPrice(price);
   }, [price]);
 
