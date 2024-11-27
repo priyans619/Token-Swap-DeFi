@@ -75,11 +75,6 @@ export const useToken = (fromToken, toToken) => {
     // Trigger an immediate fetch when token pair changes
     fetchPrice();
 
-    // polling
-    intervalId = setInterval(() => {
-      fetchPrice();
-    }, 5000);
-
     // Cleanup for token change
     return () => clearInterval(intervalId);
   }, [fromToken, toToken]);
