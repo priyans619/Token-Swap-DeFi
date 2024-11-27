@@ -6,7 +6,7 @@ const Navbar = () => {
 
   return (
     <div className="bg-black text-white p-3 flex justify-between items-center border-b-2 border-gray-600">
-      <h1 className="text-3xl ml-14 font-bold text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-white to-violet-400">
+      <h1 className="text-3xl ml-6 font-bold text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-white to-violet-400">
         DeFi Exchange
       </h1>
       <button
