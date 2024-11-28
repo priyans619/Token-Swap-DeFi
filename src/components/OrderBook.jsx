@@ -102,7 +102,7 @@ const OrderBook = ({ isDarkMode }) => {
       {/* Order Book Display for Selected Pair */}
       <div className="flex flex-col lg:flex-row gap-6">
         <div
-          className={`flex-1 p-4 rounded-lg ${
+          className={`flex-1 p-3 rounded-lg ${
             isDarkMode ? 'bg-black text-gray-300' : 'bg-gray-100 text-black'
           }`}
         >
@@ -113,8 +113,8 @@ const OrderBook = ({ isDarkMode }) => {
           <div className="flex flex-col md:flex-row gap-4">
             {/* Bids Section */}
             <div className="flex-1">
-              <h4 className="text-sm md:text-lg font-medium mb-2">
-                {isDarkMode ? 'Top-5 Bids (Dark)' : 'Top-5 Bids (Light)'}
+              <h4 className="text-sm md:text-lg font-medium mb-3 underline text-center ">
+                {isDarkMode ? 'Top-5 Bids' : 'Top-5 Bids'}
               </h4>
               <div className="flex justify-between font-bold mb-2 border-b">
                 <span>Price</span>
@@ -149,8 +149,8 @@ const OrderBook = ({ isDarkMode }) => {
 
             {/* Asks Section */}
             <div className="flex-1">
-              <h4 className="text-sm md:text-lg font-medium mb-2">
-                {isDarkMode ? 'Top-5 Asks (Dark)' : 'Top-5 Asks (Light)'}
+              <h4 className="text-sm md:text-lg font-medium mb-3 underline text-center">
+                {isDarkMode ? 'Top-5 Asks' : 'Top-5 Asks'}
               </h4>
               <div className="flex justify-between font-bold mb-2 border-b">
                 <span>Price</span>
