@@ -106,7 +106,7 @@ const OrderBook = ({ isDarkMode }) => {
             isDarkMode ? 'bg-black text-gray-300' : 'bg-gray-100 text-black'
           }`}
         >
-          <h3 className="text-lg md:text-xl font-semibold mb-6 text-gray-500">
+          <h3 className="text-lg md:text-xl font-semibold mb-6 text-gray-500 text-center border-b-2">
             Bids & Asks for {pairs.find((pair) => pair.symbol === selectedPair)?.name}
           </h3>
 
