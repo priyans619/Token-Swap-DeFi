@@ -73,13 +73,13 @@ const OrderBook = () => {
   }, []);
 
   return (
-    <div className="p-7 mt-5 bg-black rounded-lg shadow-md border-2">
+    <div className="p-6 mt-5 bg-black rounded-lg shadow-md border-2">
       {/* Pair Selection */}
-      <div className="flex gap-4 ml-2 mb-1">
+      <div className="flex flex-wrap gap-2 justify-center mb-6">
         {pairs.map(({ symbol, name }) => (
           <button
             key={symbol}
-            className={`px-4 py-1 text-lg font-semibold rounded-2xl ${
+            className={`px-3 py-1 text-sm md:text-lg font-semibold rounded-2xl ${
               selectedPair === symbol ? 'bg-black border-2 text-white' : 'bg-gray-400'
             }`}
             onClick={() => setSelectedPair(symbol)}
@@ -90,21 +90,21 @@ const OrderBook = () => {
       </div>
 
       {/* Order Book Display for Selected Pair */}
-      <div className="flex gap-8">
-        <div className="flex-1 bg-black p-2 rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold text-gray-300 mb-3">
-            Top-5 Bids & Asks for {pairs.find((pair) => pair.symbol === selectedPair)?.name}
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 bg-black p-4 rounded-lg shadow-lg">
+          <h3 className="text-lg md:text-xl font-semibold text-gray-300 mb-6">
+            Bids & Asks for {pairs.find((pair) => pair.symbol === selectedPair)?.name}
           </h3>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col md:flex-row gap-4">
             {/* Bids Section */}
-            <div className="flex-1 overflow-y-hidden">
-              <h4 className="text-lg font-medium text-gray-600 mb-2">Bids</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-1 border-b">
+            <div className="flex-1">
+              <h4 className="text-sm md:text-lg font-medium text-gray-600 mb-2">Top-5 Bids</h4>
+              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
-              <div className="h-[250px] overflow-hidden flex flex-col justify-between">
+              <div className="h-40 md:h-52 overflow-y-auto">
                 {Array.from({ length: 5 }).map((_, index) => {
                   const bid = orderBooks[selectedPair]?.bids[index];
                   return (
@@ -130,13 +130,13 @@ const OrderBook = () => {
             </div>
 
             {/* Asks Section */}
-            <div className="flex-1 ml-6 overflow-y-hidden">
-              <h4 className="text-lg font-medium text-gray-600 mb-2">Asks</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-1 border-b">
+            <div className="flex-1">
+              <h4 className="text-sm md:text-lg font-medium text-gray-600 mb-2">Top-5 Asks</h4>
+              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
-              <div className="h-[250px] overflow-hidden flex flex-col justify-between">
+              <div className="h-40 md:h-52 overflow-y-auto">
                 {Array.from({ length: 5 }).map((_, index) => {
                   const ask = orderBooks[selectedPair]?.asks[index];
                   return (
