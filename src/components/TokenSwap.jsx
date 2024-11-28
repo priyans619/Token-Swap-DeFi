@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useToken } from '../hooks/useToken';
 import { ethers } from 'ethers';
 
-const TokenSwap = () => {
+const TokenSwap = ({ isDarkMode }) => {
   const [fromToken, setFromToken] = useState('ethereum');
   const [toToken, setToToken] = useState('usd-coin');
   const [amount, setAmount] = useState('');
@@ -15,32 +15,27 @@ const TokenSwap = () => {
   const [fees, setFees] = useState(0);
   const [priceImpact, setPriceImpact] = useState(null);
 
-  const initialPriceRef = useRef(null); // Use ref to store initial price
+  const initialPriceRef = useRef(null);
 
   const { price, loading, priceDirection } = useToken(fromToken, toToken);
 
-  // Estimated amount, fees, and price impact
   useEffect(() => {
     if (amount && price) {
       const estAmount = (amount * price).toFixed(4);
       setEstimatedAmount(estAmount);
 
-      // Mock transaction fees: 0.1% of amount
       const calculatedFees = (amount * 0.001).toFixed(4);
       setFees(calculatedFees);
 
-      // Calculate price impact: simulated as 0.3% for demo
       const impact = (price * 0.003).toFixed(3);
       setPriceImpact(impact);
 
-      // Store the initial price once
       if (initialPriceRef.current === null) {
         initialPriceRef.current = price;
       }
     }
   }, [amount, price]);
 
-  // Calculate percentage change
   const percentageChange = initialPriceRef.current
     ? (((price - initialPriceRef.current) / initialPriceRef.current) * 100).toFixed(2)
     : null;
@@ -84,10 +79,8 @@ const TokenSwap = () => {
   };
 
   return (
-    <div className="bg-black border-2 p-6 rounded-lg mt-5 shadow-md text-white w-full max-w-2xl mx-auto">
-
+    <div className={`p-6 rounded-lg mt-5 shadow-md ${isDarkMode ? 'bg-black text-white border-2 border-gray-300' : 'bg-gray-100 border-2 text-black border-gray-300 '} w-full max-w-2xl mx-auto`}>
       <div className="flex flex-col gap-3">
-        {/* From Token */}
         <div className="flex items-center justify-between">
           <label htmlFor="fromToken" className="text-lg">From</label>
           <select
@@ -103,7 +96,6 @@ const TokenSwap = () => {
           </select>
         </div>
 
-        {/* To Token */}
         <div className="flex items-center justify-between">
           <label htmlFor="toToken" className="text-lg">To</label>
           <select
@@ -119,7 +111,6 @@ const TokenSwap = () => {
           </select>
         </div>
 
-        {/* Amount Input */}
         <div className="flex items-center justify-between">
           <label htmlFor="amount" className="text-lg">Amount</label>
           <input
@@ -132,7 +123,6 @@ const TokenSwap = () => {
           />
         </div>
 
-        {/* Swap Details */}
         <div className="mt-4 min-h-[200px]">
           {loading ? (
             <p className="text-center">Loading price...</p>
@@ -142,14 +132,12 @@ const TokenSwap = () => {
                 <span className="text-lg">1 {fromToken}</span>
                 <span className="text-lg">{price ? price.toFixed(3) : '0.000'} {toToken}</span>
               </div>
-              
-                <div className="flex justify-between">
-                  <span className="text-sm text-yellow-500">Real-Time Change</span>
-                  <span className={`text-sm ${percentageChange > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                    {percentageChange}% {percentageChange > 0 ? '↑' : '↓'}
-                  </span>
-                </div>
-              
+              <div className="flex justify-between">
+                <span className="text-sm text-yellow-500">Real-Time Change</span>
+                <span className={`text-sm ${percentageChange > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {percentageChange}% {percentageChange > 0 ? '↑' : '↓'}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-sm">Slippage</span>
                 <span className="text-sm">{slippage}%</span>
@@ -168,12 +156,10 @@ const TokenSwap = () => {
                   {amount} {fromToken} = {estimatedAmount} {toToken}
                 </span>
               </div>
-
             </div>
           )}
         </div>
 
-        {/* Swap Button */}
         <button
           onClick={handleSwap}
           className={`bg-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-700 ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -183,7 +169,6 @@ const TokenSwap = () => {
         </button>
       </div>
 
-      {/* Transaction Confirmation */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-gray-800 p-6 rounded shadow-lg text-white max-w-md w-full">
@@ -204,7 +189,6 @@ const TokenSwap = () => {
       )}
     </div>
   );
-
 };
 
 export default TokenSwap;
