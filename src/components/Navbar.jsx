@@ -19,7 +19,7 @@ const Navbar = ({ isDarkMode, toggleDarkMode }) => {
         DeFi Exchange
       </h1>
 
-      <div className="flex items-center sm:gap-6 mr-8">
+      <div className="flex items-center sm:gap-3 mr-6">
         <button
           onClick={connectWallet}
           className="bg-gradient-to-r from-yellow-500 via-violet-500 to-blue-500 text-white font-bold py-2 px-6 rounded-2xl border-2 border-blue-500 transition duration-300 hover:bg-black hover:from-black hover:via-black hover:to-black text-xs sm:text-base"
