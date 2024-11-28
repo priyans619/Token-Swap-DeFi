@@ -26,12 +26,12 @@ const Home = () => {
 
   return (
     <div
-      className={`h-screen ${isDarkMode ? 'bg-gradient-to-b from-black to-blue-200 text-white' : 'bg-white text-black'}`}
+      className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-b from-black to-blue-200 text-white' : 'bg-white text-black'}`}
     >
       <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
       <div className="flex flex-col lg:flex-row mt-10 px-6">
         <div className="flex-1 mr-8">
-          <h2 className="text-2xl font-semibold mb-4">Token Swap</h2>
+          <h2 className="text-2xl font-semibold mb-4 ml-4">Token Swap</h2>
           <TokenSwap isDarkMode={isDarkMode} />
         </div>
         <div className="flex-1 mr-10">
