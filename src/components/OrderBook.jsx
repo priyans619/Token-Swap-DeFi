@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const OrderBook = () => {
+const OrderBook = ({ isDarkMode }) => {
   const [orderBooks, setOrderBooks] = useState({
     ethusdt: { bids: [], asks: [] },
     ethbtc: { bids: [], asks: [] },
@@ -73,14 +73,24 @@ const OrderBook = () => {
   }, []);
 
   return (
-    <div className="p-6 mt-5 bg-black rounded-lg shadow-md border-2">
+    <div
+      className={`p-6 mt-5 rounded-lg shadow-md border-2 ${
+        isDarkMode
+          ? 'bg-black border-2 text-white'
+          : 'bg-gray-100 border-gray-300 text-black'
+      }`}
+    >
       {/* Pair Selection */}
       <div className="flex flex-wrap gap-2 justify-center mb-6">
         {pairs.map(({ symbol, name }) => (
           <button
             key={symbol}
             className={`px-3 py-1 text-sm md:text-lg font-semibold rounded-2xl ${
-              selectedPair === symbol ? 'bg-black border-2 text-white' : 'bg-gray-400'
+              selectedPair === symbol
+                ? isDarkMode
+                  ? 'bg-black border-2 text-white'
+                  : 'bg-gray-200 border-black text-black'
+                : 'bg-gray-400 text-black'
             }`}
             onClick={() => setSelectedPair(symbol)}
           >
@@ -91,16 +101,22 @@ const OrderBook = () => {
 
       {/* Order Book Display for Selected Pair */}
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex-1 bg-black p-4 rounded-lg shadow-lg">
-          <h3 className="text-lg md:text-xl font-semibold text-gray-300 mb-6">
+        <div
+          className={`flex-1 p-4 rounded-lg ${
+            isDarkMode ? 'bg-black text-gray-300' : 'bg-gray-100 text-black'
+          }`}
+        >
+          <h3 className="text-lg md:text-xl font-semibold mb-6 text-gray-500">
             Bids & Asks for {pairs.find((pair) => pair.symbol === selectedPair)?.name}
           </h3>
 
           <div className="flex flex-col md:flex-row gap-4">
             {/* Bids Section */}
             <div className="flex-1">
-              <h4 className="text-sm md:text-lg font-medium text-gray-600 mb-2">Top-5 Bids</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
+              <h4 className="text-sm md:text-lg font-medium mb-2">
+                {isDarkMode ? 'Top-5 Bids (Dark)' : 'Top-5 Bids (Light)'}
+              </h4>
+              <div className="flex justify-between font-bold mb-2 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
@@ -110,9 +126,11 @@ const OrderBook = () => {
                   return (
                     <div
                       key={index}
-                      className="flex justify-between items-center p-2 border-b border-gray-300"
+                      className={`flex justify-between items-center p-2 border-b ${
+                        isDarkMode ? 'border-gray-600' : 'border-gray-300'
+                      }`}
                     >
-                      <span className="flex items-center text-gray-400 font-medium">
+                      <span className="flex items-center">
                         {bid
                           ? priceTrends[selectedPair]?.bids[bid[0]] === 'up' ? (
                               <span className="text-green-400 mr-1">↑</span>
@@ -122,7 +140,7 @@ const OrderBook = () => {
                           : ''}
                         {bid ? bid[0] : '—'}
                       </span>
-                      <span className="text-blue-500 font-medium">{bid ? bid[1] : '—'}</span>
+                      <span className="text-blue-500">{bid ? bid[1] : '—'}</span>
                     </div>
                   );
                 })}
@@ -131,8 +149,10 @@ const OrderBook = () => {
 
             {/* Asks Section */}
             <div className="flex-1">
-              <h4 className="text-sm md:text-lg font-medium text-gray-600 mb-2">Top-5 Asks</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
+              <h4 className="text-sm md:text-lg font-medium mb-2">
+                {isDarkMode ? 'Top-5 Asks (Dark)' : 'Top-5 Asks (Light)'}
+              </h4>
+              <div className="flex justify-between font-bold mb-2 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
@@ -142,9 +162,11 @@ const OrderBook = () => {
                   return (
                     <div
                       key={index}
-                      className="flex justify-between items-center p-2 border-b border-gray-300"
+                      className={`flex justify-between items-center p-2 border-b ${
+                        isDarkMode ? 'border-gray-600' : 'border-gray-300'
+                      }`}
                     >
-                      <span className="flex items-center text-gray-400 font-medium">
+                      <span className="flex items-center">
                         {ask
                           ? priceTrends[selectedPair]?.asks[ask[0]] === 'up' ? (
                               <span className="text-green-400 mr-1">↑</span>
@@ -154,7 +176,7 @@ const OrderBook = () => {
                           : ''}
                         {ask ? ask[0] : '—'}
                       </span>
-                      <span className="text-blue-500 font-medium">{ask ? ask[1] : '—'}</span>
+                      <span className="text-blue-500">{ask ? ask[1] : '—'}</span>
                     </div>
                   );
                 })}
