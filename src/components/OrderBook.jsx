@@ -57,14 +57,14 @@ const OrderBook = () => {
   }, []);
 
   return (
-    <div className="p-6 mt-10 bg-gray-800 rounded-lg shadow-md">
+    <div className="p-7 mt-5 bg-black rounded-lg shadow-md border-2">
       {/* Pair Selection */}
       <div className="flex gap-4 mb-6">
         {pairs.map(({ symbol, name }) => (
           <button
             key={symbol}
             className={`px-4 py-2 text-lg font-semibold rounded-lg ${
-              selectedPair === symbol ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              selectedPair === symbol ? 'bg-violet-400 text-white' : 'bg-gray-200'
             }`}
             onClick={() => setSelectedPair(symbol)}
           >
@@ -76,8 +76,8 @@ const OrderBook = () => {
       {/* Order Book Display for Selected Pair */}
       <div className="flex gap-8">
         {/* Bids and Asks horizontal*/}
-        <div className="flex-1 bg-gray-50 p-4 rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">
+        <div className="flex-1 bg-black p-4 rounded-lg shadow-lg">
+          <h3 className="text-xl font-semibold text-white mb-4">
             Bids & Asks for {pairs.find(pair => pair.symbol === selectedPair)?.name}
           </h3>
 
