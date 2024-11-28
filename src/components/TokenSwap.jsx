@@ -11,7 +11,7 @@ const TokenSwap = () => {
   const [transactionDetails, setTransactionDetails] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const [slippage, setSlippage] = useState(0.5); 
+  const [slippage, setSlippage] = useState(0.5);
   const [fees, setFees] = useState(0);
   const [priceImpact, setPriceImpact] = useState(null);
 
@@ -84,10 +84,9 @@ const TokenSwap = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg mt-9 shadow-xl text-white w-full max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Token Swap</h2>
+    <div className="bg-black border-2 p-6 rounded-lg mt-5 shadow-md text-white w-full max-w-2xl mx-auto">
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {/* From Token */}
         <div className="flex items-center justify-between">
           <label htmlFor="fromToken" className="text-lg">From</label>
@@ -134,7 +133,7 @@ const TokenSwap = () => {
         </div>
 
         {/* Swap Details */}
-        <div className="mt-4">
+        <div className="mt-4 min-h-[200px]">
           {loading ? (
             <p className="text-center">Loading price...</p>
           ) : (
@@ -143,14 +142,14 @@ const TokenSwap = () => {
                 <span className="text-lg">1 {fromToken}</span>
                 <span className="text-lg">{price ? price.toFixed(3) : '0.000'} {toToken}</span>
               </div>
-              {percentageChange && (
+              
                 <div className="flex justify-between">
                   <span className="text-sm text-yellow-500">Real-Time Change</span>
                   <span className={`text-sm ${percentageChange > 0 ? 'text-green-500' : 'text-red-500'}`}>
                     {percentageChange}% {percentageChange > 0 ? '↑' : '↓'}
                   </span>
                 </div>
-              )}
+              
               <div className="flex justify-between">
                 <span className="text-sm">Slippage</span>
                 <span className="text-sm">{slippage}%</span>
@@ -163,14 +162,13 @@ const TokenSwap = () => {
                 <span className="text-sm">Price Impact</span>
                 <span className="text-sm">{priceImpact} {toToken}</span>
               </div>
-              {estimatedAmount && (
-                <div className="flex justify-between">
-                  <span className="text-sm">Estimated</span>
-                  <span className="text-sm">
-                    {amount} {fromToken} = {estimatedAmount} {toToken}
-                  </span>
-                </div>
-              )}
+              <div className="flex justify-between">
+                <span className="text-sm">Estimated</span>
+                <span className="text-sm">
+                  {amount} {fromToken} = {estimatedAmount} {toToken}
+                </span>
+              </div>
+
             </div>
           )}
         </div>
@@ -206,6 +204,7 @@ const TokenSwap = () => {
       )}
     </div>
   );
+
 };
 
 export default TokenSwap;
