@@ -4,11 +4,15 @@ const OrderBook = () => {
   const [orderBooks, setOrderBooks] = useState({
     ethusdt: { bids: [], asks: [] },
     ethbtc: { bids: [], asks: [] },
+    usdtwbtc: { bids: [], asks: [] },
+    wbtceth: { bids: [], asks: [] },
   });
 
   const [priceTrends, setPriceTrends] = useState({
     ethusdt: { bids: {}, asks: {} },
     ethbtc: { bids: {}, asks: {} },
+    usdtwbtc: { bids: {}, asks: {} },
+    wbtceth: { bids: {}, asks: {} },
   });
 
   const [selectedPair, setSelectedPair] = useState('ethusdt');
@@ -16,6 +20,8 @@ const OrderBook = () => {
   const pairs = [
     { symbol: 'ethusdt', name: 'ETH/USDT' },
     { symbol: 'ethbtc', name: 'ETH/BTC' },
+    { symbol: 'usdtwbtc', name: 'USDT/WBTC' },
+    { symbol: 'wbtceth', name: 'WBTC/ETH' },
   ];
 
   useEffect(() => {
@@ -23,7 +29,7 @@ const OrderBook = () => {
     const previousPrices = {};
 
     pairs.forEach(({ symbol }) => {
-      previousPrices[symbol] = { bids: [], asks: [] }; // Initialize previous prices
+      previousPrices[symbol] = { bids: [], asks: [] };
 
       const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@depth`);
       sockets[symbol] = socket;
@@ -42,13 +48,11 @@ const OrderBook = () => {
 
         const updatedTrends = { bids: {}, asks: {} };
 
-        // Compare bids
         bids.slice(0, 5).forEach(([price], index) => {
           const prevBidPrice = parseFloat(previousPrices[symbol]?.bids[index]?.[0] || 0);
           updatedTrends.bids[price] = parseFloat(price) > prevBidPrice ? 'up' : 'down';
         });
 
-        // Compare asks
         asks.slice(0, 5).forEach(([price], index) => {
           const prevAskPrice = parseFloat(previousPrices[symbol]?.asks[index]?.[0] || Infinity);
           updatedTrends.asks[price] = parseFloat(price) < prevAskPrice ? 'up' : 'down';
@@ -71,12 +75,12 @@ const OrderBook = () => {
   return (
     <div className="p-7 mt-5 bg-black rounded-lg shadow-md border-2">
       {/* Pair Selection */}
-      <div className="flex gap-4 ml-2">
+      <div className="flex gap-4 ml-2 mb-2">
         {pairs.map(({ symbol, name }) => (
           <button
             key={symbol}
             className={`px-4 py-1 text-lg font-semibold rounded-lg ${
-              selectedPair === symbol ? 'bg-violet-400 text-white' : 'bg-gray-200'
+              selectedPair === symbol ? 'bg-violet-900 text-white' : 'bg-gray-500'
             }`}
             onClick={() => setSelectedPair(symbol)}
           >
@@ -88,15 +92,15 @@ const OrderBook = () => {
       {/* Order Book Display for Selected Pair */}
       <div className="flex gap-8">
         <div className="flex-1 bg-black p-2 rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-3">
+          <h3 className="text-xl font-semibold text-gray-300 mb-3">
             Top-5 Bids & Asks for {pairs.find((pair) => pair.symbol === selectedPair)?.name}
           </h3>
 
           <div className="flex justify-between">
             {/* Bids Section */}
             <div className="flex-1 overflow-y-hidden">
-              <h4 className="text-lg font-medium text-gray-600 mb-3">Bids</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
+              <h4 className="text-lg font-medium text-gray-600 mb-2">Bids</h4>
+              <div className="flex justify-between font-bold text-gray-400 mb-1 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
@@ -127,8 +131,8 @@ const OrderBook = () => {
 
             {/* Asks Section */}
             <div className="flex-1 ml-6 overflow-y-hidden">
-              <h4 className="text-lg font-medium text-gray-600 mb-3">Asks</h4>
-              <div className="flex justify-between font-bold text-gray-400 mb-2 border-b">
+              <h4 className="text-lg font-medium text-gray-600 mb-2">Asks</h4>
+              <div className="flex justify-between font-bold text-gray-400 mb-1 border-b">
                 <span>Price</span>
                 <span>Quantity</span>
               </div>
